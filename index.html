@@ -201,7 +201,7 @@
         <h1 data-i18n="hero_title">Gauss 数学竞赛查看器</h1>
         <p data-i18n="hero_subtitle">一个为滑铁卢大学高斯数学竞赛打造的现代网页应用。支持多年度题目与答案切换、流畅缩放，适配平板与电视大屏。</p>
         <div class="hero-buttons">
-            <!-- TODO: 请将这里的链接替换为你主站的实际 Vercel 域名 -->
+            <!-- 注意：这里的主站链接，如果以后主站域名变了，请在这里修改 -->
             <a href="https://gauss-viewer-app.vercel.app" target="_blank" class="btn-primary" data-i18n="hero_btn_demo">在线预览</a>
             <a href="https://github.com/couragefindsvalue/gauss-viewer" target="_blank" class="btn-secondary" data-i18n="hero_btn_github">查看源码</a>
         </div>
@@ -234,8 +234,8 @@
     <!-- 截图展示 -->
     <section class="screenshot-section">
         <h2 data-i18n="screenshot_title">界面预览</h2>
-        <!-- TODO: 请替换为你自己的截图路径，例如 /screenshot.png -->
-        <img src="https://via.placeholder.com/1000x600/1e293b/3b82f6?text=Gauss+Viewer+Screenshot" alt="Gauss Viewer Screenshot">
+        <!-- 截图路径已修改，指向你放在 public 目录下的 screenshot.png -->
+        <img src="screenshot.png" alt="Gauss Viewer Screenshot">
     </section>
 
     <!-- 技术栈 -->
@@ -300,11 +300,9 @@
 
         function setLanguage(lang) {
             currentLang = lang;
-            // 更新按钮状态
             document.getElementById('btn-lang-zh').classList.toggle('active', lang === 'zh');
             document.getElementById('btn-lang-en').classList.toggle('active', lang === 'en');
 
-            // 更新文本
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang] && translations[lang][key]) {
@@ -312,7 +310,6 @@
                 }
             });
 
-            // 更新 HTML lang 属性
             document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
         }
 
