@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gauss Contest Viewer | 高斯竞赛查看器</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --success: #10b981;
+            --border: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        /* 导航栏 */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .logo { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-btn {
+            background: var(--card-bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { background: var(--border); }
+        .lang-toggle {
+            display: flex;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .lang-toggle button {
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .lang-toggle button.active {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* 英雄区 */
+        .hero {
+            max-width: 1000px;
+            margin: 80px auto;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .hero h1 { font-size: 48px; line-height: 1.2; margin-bottom: 20px; }
+        .hero p { font-size: 20px; color: var(--text-muted); margin-bottom: 40px; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            transition: background 0.2s;
+        }
+        .btn-secondary:hover { background: var(--card-bg); }
+
+        /* 功能特性 */
+        .features {
+            max-width: 1200px;
+            margin: 100px auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .feature-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+        .feature-icon { font-size: 32px; margin-bottom: 16px; }
+        .feature-card h3 { font-size: 20px; margin-bottom: 12px; }
+        .feature-card p { color: var(--text-muted); font-size: 15px; }
+
+        /* 截图 */
+        .screenshot-section {
+            max-width: 1000px;
+            margin: 100px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        .screenshot-section h2 { font-size: 32px; margin-bottom: 40px; }
+        .screenshot-section img {
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        /* 技术栈 */
+        .tech-stack {
+            max-width: 800px;
+            margin: 100px auto;
+            text-align: center;
+            padding: 0 20px;
+        }
+        .tech-stack h2 { font-size: 28px; margin-bottom: 30px; }
+        .tech-badges { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .tech-badge {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* 页脚 */
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+            margin-top: 100px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            nav { padding: 16px 20px; flex-wrap: wrap; gap: 16px; }
+            .hero { margin: 40px auto; }
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 17px; }
+            .features { padding: 0 20px; margin: 60px auto; }
+            .screenshot-section { margin: 60px auto; }
+            .tech-stack { margin: 60px auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 导航栏 -->
+    <nav>
+        <div class="logo">
+            <span>📘</span> Gauss Viewer
+        </div>
+        <div class="nav-links">
+            <div class="lang-toggle">
+                <button id="btn-lang-zh" onclick="setLanguage('zh')">中文</button>
+                <button id="btn-lang-en" onclick="setLanguage('en')">EN</button>
+            </div>
+            <a href="https://github.com/couragefindsvalue/gauss-viewer" target="_blank" class="nav-btn">
+                <span data-i18n="nav_github">GitHub</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- 英雄区 -->
+    <header class="hero">
+        <h1 data-i18n="hero_title">Gauss 数学竞赛查看器</h1>
+        <p data-i18n="hero_subtitle">一个为滑铁卢大学高斯数学竞赛打造的现代网页应用。支持多年度题目与答案切换、流畅缩放，适配平板与电视大屏。</p>
+        <div class="hero-buttons">
+            <!-- TODO: 请将这里的链接替换为你主站的实际 Vercel 域名 -->
+            <a href="https://gauss-viewer-app.vercel.app" target="_blank" class="btn-primary" data-i18n="hero_btn_demo">在线预览</a>
+            <a href="https://github.com/couragefindsvalue/gauss-viewer" target="_blank" class="btn-secondary" data-i18n="hero_btn_github">查看源码</a>
+        </div>
+    </header>
+
+    <!-- 功能特性 -->
+    <section class="features">
+        <div class="feature-card">
+            <div class="feature-icon">📄</div>
+            <h3 data-i18n="feat1_title">PDF 自动切图</h3>
+            <p data-i18n="feat1_desc">自动解析 PDF 文件，跳过封面，精准切分每一页题目与答案，输出高清 WebP 图片。</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3 data-i18n="feat2_title">题目 / 答案一键切换</h3>
+            <p data-i18n="feat2_desc">无缝在题目与解答之间切换，保留滚动位置，方便对照查看。</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3 data-i18n="feat3_title">极致的缩放与适配</h3>
+            <p data-i18n="feat3_desc">支持双指捏合、按钮缩放与双击复位，完美适配平板、电视及桌面端。</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3 data-i18n="feat4_title">多年度题库</h3>
+            <p data-i18n="feat4_desc">内置 2016 至 2026 年历年真题，年份下拉框一键切换。</p>
+        </div>
+    </section>
+
+    <!-- 截图展示 -->
+    <section class="screenshot-section">
+        <h2 data-i18n="screenshot_title">界面预览</h2>
+        <!-- TODO: 请替换为你自己的截图路径，例如 /screenshot.png -->
+        <img src="https://via.placeholder.com/1000x600/1e293b/3b82f6?text=Gauss+Viewer+Screenshot" alt="Gauss Viewer Screenshot">
+    </section>
+
+    <!-- 技术栈 -->
+    <section class="tech-stack">
+        <h2 data-i18n="tech_title">技术栈</h2>
+        <div class="tech-badges">
+            <span class="tech-badge">Python / Flask</span>
+            <span class="tech-badge">pdfplumber</span>
+            <span class="tech-badge">Vanilla JS</span>
+            <span class="tech-badge">Vercel</span>
+            <span class="tech-badge">WebP</span>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <p data-i18n="footer_text">© 2026 Gauss Contest Viewer. 开源项目，基于 MIT 协议。</p>
+    </footer>
+
+    <script>
+        // 双语字典
+        const translations = {
+            zh: {
+                nav_github: "GitHub",
+                hero_title: "Gauss 数学竞赛查看器",
+                hero_subtitle: "一个为滑铁卢大学高斯数学竞赛打造的现代网页应用。支持多年度题目与答案切换、流畅缩放，适配平板与电视大屏。",
+                hero_btn_demo: "在线预览",
+                hero_btn_github: "查看源码",
+                feat1_title: "PDF 自动切图",
+                feat1_desc: "自动解析 PDF 文件，跳过封面，精准切分每一页题目与答案，输出高清 WebP 图片。",
+                feat2_title: "题目 / 答案一键切换",
+                feat2_desc: "无缝在题目与解答之间切换，保留滚动位置，方便对照查看。",
+                feat3_title: "极致的缩放与适配",
+                feat3_desc: "支持双指捏合、按钮缩放与双击复位，完美适配平板、电视及桌面端。",
+                feat4_title: "多年度题库",
+                feat4_desc: "内置 2016 至 2026 年历年真题，年份下拉框一键切换。",
+                screenshot_title: "界面预览",
+                tech_title: "技术栈",
+                footer_text: "© 2026 Gauss Contest Viewer. 开源项目，基于 MIT 协议。"
+            },
+            en: {
+                nav_github: "GitHub",
+                hero_title: "Gauss Math Contest Viewer",
+                hero_subtitle: "A modern web app for the University of Waterloo Gauss Math Contest. Features multi-year question & solution switching, smooth zooming, and tablet/TV optimization.",
+                hero_btn_demo: "Live Demo",
+                hero_btn_github: "View Source",
+                feat1_title: "PDF Auto-Cropping",
+                feat1_desc: "Automatically parses PDFs, skips covers, and precisely crops each question and solution page into high-res WebP images.",
+                feat2_title: "Question / Solution Toggle",
+                feat2_desc: "Seamlessly switch between questions and solutions while preserving scroll position for easy comparison.",
+                feat3_title: "Extreme Zoom & Responsive",
+                feat3_desc: "Supports pinch-to-zoom, button controls, and double-tap reset. Perfect for tablets, TVs, and desktops.",
+                feat4_title: "Multi-Year Archive",
+                feat4_desc: "Includes past papers from 2016 to 2026, switchable via a single dropdown.",
+                screenshot_title: "Screenshot",
+                tech_title: "Tech Stack",
+                footer_text: "© 2026 Gauss Contest Viewer. Open source under the MIT License."
+            }
+        };
+
+        let currentLang = 'zh';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            // 更新按钮状态
+            document.getElementById('btn-lang-zh').classList.toggle('active', lang === 'zh');
+            document.getElementById('btn-lang-en').classList.toggle('active', lang === 'en');
+
+            // 更新文本
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            // 更新 HTML lang 属性
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+        }
+
+        // 初始化默认语言
+        setLanguage('zh');
+    </script>
+
+</body>
+</html>
